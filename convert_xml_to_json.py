@@ -49,8 +49,11 @@ def order_dict_2_box(order_dict):
 
 
 def parse_annot(annot_name, data_dir):
-    if not data_dir.endswith('/'):
-        data_dir += '/'
+    # Remove camera number in in the end.
+    data_dir = os.path.dirname(data_dir)
+    # Adds '/' in the end.
+    data_dir += '/'
+
     assert(annot_name.endswith(".xml"))
     with open(annot_name) as xml_d:
         ss = xml_d.read()
