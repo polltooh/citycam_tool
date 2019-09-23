@@ -49,6 +49,8 @@ def order_dict_2_box(order_dict):
 
 
 def parse_annot(annot_name, data_dir):
+    if not data_dir.endswith('/'):
+        data_dir += '/'
     assert(annot_name.endswith(".xml"))
     with open(annot_name) as xml_d:
         ss = xml_d.read()
@@ -163,7 +165,7 @@ def main():
     data_dir = '../citycam_dataset/CityCam/'
     cam_list = ['164','166','170','173','181','253','398','403','410','495','511','551','572','691','846','928','bigbus']
     downtown_train, downtown_test, parkway_train, parkway_test = read_train_test_separation(data_dir)
-    generate_json(data_dir, cam_list, downtown_train, 'Downtown_Tran.json')
+    generate_json(data_dir, cam_list, downtown_train, 'Downtown_Train.json')
     generate_json(data_dir, cam_list, downtown_test, 'Downtown_Test.json')
     generate_json(data_dir, cam_list, parkway_train, 'Parkway_Train.json')
     generate_json(data_dir, cam_list, parkway_test, 'Parkway_Test.json')
