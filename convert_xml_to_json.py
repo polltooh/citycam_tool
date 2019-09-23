@@ -163,8 +163,10 @@ def main():
     data_dir = '../citycam_dataset/CityCam/'
     cam_list = ['164','166','170','173','181','253','398','403','410','495','511','551','572','691','846','928','bigbus']
     downtown_train, downtown_test, parkway_train, parkway_test = read_train_test_separation(data_dir)
-    # generate_json(data_dir, cam_list, downtown_train, 'Downtown_Tran.json')
+    generate_json(data_dir, cam_list, downtown_train, 'Downtown_Tran.json')
     generate_json(data_dir, cam_list, downtown_test, 'Downtown_Test.json')
+    generate_json(data_dir, cam_list, parkway_train, 'Parkway_Train.json')
+    generate_json(data_dir, cam_list, parkway_test, 'Parkway_Test.json')
 
     # json_list = json_list_for_single_cam(data_dir, cam_list[0], downtown_train)
 
