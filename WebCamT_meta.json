@@ -1,12 +1,23 @@
 {
     "meta": {
-        "image_width": 352, 
-        "image_height": 240, 
-        "classes": [
-            "vehicle"
+        "label_map": [
+            {
+                "0": "Unknown", 
+                "1": "Taxi", 
+                "2": "Black sedan", 
+                "3": "Other car", 
+                "4": "Little truck", 
+                "5": "Middle truck", 
+                "6": "Big truck", 
+                "7": "Van", 
+                "8": "Middle bus", 
+                "9": "Big bus", 
+                "10": "Bicyle"
+            }
         ], 
-        "num_classes": 11, 
-        "max_num_box": 56, 
-        "dataset_name": "WebCamT"
+        "image_height": 240, 
+        "image_width": 352, 
+        "dataset_name": "WebCamT", 
+        "num_classes": 11
     }
 }
