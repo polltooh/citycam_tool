@@ -8,6 +8,9 @@ import xmltodict
 # import cv2
 import numpy as np
 
+_IMAGE_WIDTH = 352
+_IMAGE_HEIGHT = 240
+
 
 def meta_property():
     label_map = {
@@ -43,7 +46,8 @@ def meta_property():
 
 def order_dict_2_box(order_dict):
     bbox = order_dict['bndbox']
-    box = [bbox['ymin'], bbox['xmin'], bbox['ymax'], bbox['xmax']]
+    box = [bbox['ymin'], bbox['xmin'], min(_IMAGE_HEIGHT, bbox['ymax']),
+           min(_IMAGE_WIDTH, bbox['xmax'])]
     box = [float(b) for b in box]
     return box
 
@@ -105,13 +109,13 @@ def full_path_listdir(data_dir):
     return [os.path.join(data_dir, f) for f in os.listdir(data_dir)]
 
 
-def txt_to_json(data_dir, select_set):
+def txt_to_json(data_dir, select_set=None):
     print('Processing {}'.format(data_dir))
     json_list = []
     cam_path_list = [f for f in full_path_listdir(data_dir) if os.path.isdir(f)]
     for cam_path in cam_path_list:
         cam_basename = os.path.basename(cam_path)
-        if cam_basename not in select_set:
+        if select_set is not None and cam_basename not in select_set:
             continue
 
         annotation_list = [os.path.join(cam_path, f) for f in os.listdir(
@@ -124,7 +128,7 @@ def txt_to_json(data_dir, select_set):
     return json_list
 
 
-def json_list_for_single_cam(data_dir, cam_num, select_set):
+def json_list_for_single_cam(data_dir, cam_num, select_set=None):
     json_list = txt_to_json(os.path.join(data_dir, cam_num), select_set)
 
     # with open('{}.json'.format(cam_num), 'w') as f:
@@ -137,7 +141,7 @@ def json_list_for_single_cam(data_dir, cam_num, select_set):
 
 def read_txt_file(file_path):
     with open(file_path, 'r') as f:
-        file_set = set(f.read().replace('\n','').split('\r'))
+        file_set = set(f.read().replace('\n', '').split('\r'))
     return file_set
 
 
@@ -161,17 +165,21 @@ def generate_json(data_dir, cam_list, select_set, save_path):
     with open(save_path, 'w') as f:
         json.dump(json_list, f, indent=4)
 
+
 def main():
     meta = meta_property()
     meta_json = {'meta': meta}
     # data_dir = '../traffic_video_analysis/data/CityCam/'
     data_dir = '../citycam_dataset/CityCam/'
-    cam_list = ['164','166','170','173','181','253','398','403','410','495','511','551','572','691','846','928','bigbus']
-    downtown_train, downtown_test, parkway_train, parkway_test = read_train_test_separation(data_dir)
-    generate_json(data_dir, cam_list, downtown_train, 'Downtown_Train.json')
-    generate_json(data_dir, cam_list, downtown_test, 'Downtown_Test.json')
-    generate_json(data_dir, cam_list, parkway_train, 'Parkway_Train.json')
-    generate_json(data_dir, cam_list, parkway_test, 'Parkway_Test.json')
+    cam_list = ['164', '166', '170', '173', '181', '253', '398', '403',
+                '410', '495', '511', '551', '572', '691', '846', '928', 'bigbus']
+    downtown_train, downtown_test, parkway_train, parkway_test = read_train_test_separation(
+        data_dir)
+    generate_json(data_dir, cam_list, None, 'full_data.json')
+    # generate_json(data_dir, cam_list, downtown_train, 'Downtown_Train.json')
+    # generate_json(data_dir, cam_list, downtown_test, 'Downtown_Test.json')
+    # generate_json(data_dir, cam_list, parkway_train, 'Parkway_Train.json')
+    # generate_json(data_dir, cam_list, parkway_test, 'Parkway_Test.json')
 
     # json_list = json_list_for_single_cam(data_dir, cam_list[0], downtown_train)
 
